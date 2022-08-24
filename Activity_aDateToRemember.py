@@ -8,9 +8,9 @@ def separator():
 user = "Caden"
 date = "Casey"
 restaurant = "Kura Diner"
-feelings = ['Bored', 'Uninterested', 'Intrigued', 'Interested']
-menu = {'Salad': ['Chicken', 'Green', 'Quinoa'], 'Burger': ['Classic', 'Veggie', 'Bean'], 'Side': ['Fries', 'Wings', 'Coleslaw']}
-price = {'Salad': 20, 'Burger': 25, 'Side': 15}
+feelings = ['Uninterested', 'Maybe', 'Interested']
+menu = {'Salads': ['Chicken', 'Green', 'Quinoa'], 'Burgers': ['Classic', 'Veggie', 'Bean'], 'Sides': ['Fries', 'Wings', 'Coleslaw']}
+price = {'Salad': 20, 'Burger': 25, 'Sides': 15}
 
 separator()
 print(f'A Date To Remember at {restaurant}'.center(60))
@@ -33,8 +33,9 @@ else:
         checkUserInput = menu.get(userCategory.capitalize())
         if checkUserInput is not None:
             while True:
-                userItem = input(f'\nChoose an item from {menu[userCategory.capitalize()]}: ')
-                if userItem in menu[userCategory.capitalize()]:
+                userItem = input(f'\nChoose an item from {menu[userCategory]}: ')
+                if userItem.capitalize() in menu[userCategory]:
+                    userItem = userItem.capitalize()
                     break
                 else:
                     print("Invalid category!")
@@ -46,7 +47,10 @@ else:
     dateRandom = random.randint(0,2)
     dateItem = menu[dateCategory][dateRandom]
 
-    status = input(f'\nAn order of {userItem} for {user}, and {dateItem} for {date}!\n\n*Whisper*So {user}, how is the date going so far? Choose from this list: {feelings}: ')
+    userFeeling = input(f'\nAn order of {userItem} - {userCategory} for {user}, and {dateItem} - {dateCategory} for {date}!\n\n**Whisper**\nSo {user}, how is the date going so far? Choose from {feelings}: ')
+    
+    userFeeling = userFeeling.capitalize()
+    dateFeeling = random.choice(feelings)
 
     separator()
 
@@ -57,18 +61,20 @@ else:
     
     if money < 0:
         print(f'\nYour card got declined - there\'s not enough money, the balance is ${money}')
+        print(f'{date} - please cover the rest!')
+        if dateFeeling == 'Interested':
+            print(f'{date} mentioned that they were {dateFeeling}, but unfortunately, that is not the case anymore...')
+            dateFeeling = 'Uninterested'
+        print(f'{user}, sorry to break it to you but seems like {date} is not interested in a second date... Good luck!')
     else:
         print(f'\nThanks for the payment, {user}! You now have ${money} left')
 
-        if status.capitalize() == 'Bored' or status.capitalize() == 'Uninterested':
-            if userCategory.capitalize() == 'Sides' or dateCategory.capitalize() == 'Sides':
-                print('Sorry, there won\'t be a next date...')
-        elif status.capitalize() == 'Intrigued':
-            if userCategory.capitalize() == 'Sides' or dateCategory.capitalize() == 'Sides':
-                print('Sorry, there won\'t be a next date...')
-            elif userCategory.capitalize() == 'Salads' or dateCategory.capitalize() == 'Salads':
-                print('Hmm... Maybe there\'s a chance... Try hitting them up in a couple of days!')
+        if userFeeling == 'Uninterested' or dateFeeling == 'Uninterested':
+                print(f'Both of you agreed that this wasn\'t a good match - there won\'t be another date!')
+        elif userFeeling == 'Maybe' or dateFeeling == 'Maybe':
+            if userCategory == 'Sides' or dateCategory == 'Sides':
+                print("Hmm... Picking a side on a date does not seem too promising... You guys should talk it out and decide on next steps...")
             else:
-                print('Wooo! Successful date! Definitely set up a second date!')
+                print("Forget about feeling unsure! You guys make a good couple, go on another date!")
         else:
             print('Wooo! Successful date! Definitely set up a second date!')
